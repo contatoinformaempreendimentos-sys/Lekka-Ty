@@ -284,49 +284,92 @@ export default function App() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                className="flex flex-col items-center py-4"
+                className="flex flex-col items-center py-2 space-y-6"
               >
-                <h3 className="font-serif text-xl font-bold text-accent mb-10">Twój Czas Postu</h3>
+                <h3 className="font-serif text-xl font-bold text-accent w-full text-left">Post Przerywany</h3>
                 
-                <div className="relative w-72 h-72 flex items-center justify-center">
-                  {/* Progress Ring */}
-                  <svg className="absolute inset-0 w-full h-full -rotate-90">
-                    <circle 
-                      cx="144" cy="144" r="130" 
-                      className="stroke-slate-100 fill-none stroke-[12]"
-                    />
-                    <circle 
-                      cx="144" cy="144" r="130" 
-                      className="stroke-primary fill-none stroke-[12] transition-all duration-1000"
-                      strokeDasharray={816.8}
-                      strokeDashoffset={816.8 - (816.8 * fastingProgress) / 100}
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                  
-                  <div className="text-center z-10">
-                    <span className={cn("text-xs font-extrabold uppercase tracking-[0.2em] mb-2 block", state.fasting.isActive ? "text-primary" : "text-slate-400")}>
-                      {state.fasting.isActive ? "Trwa Post" : "Gotowa?"}
-                    </span>
-                    <span className="text-5xl font-extrabold text-accent tabular-nums">{fastingTime}</span>
+                {/* Fasting Plan Info Card */}
+                <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-50 w-full">
+                  <h4 className="font-bold text-accent mb-4 text-center">Twój Plan: 16:8</h4>
+                  <div className="flex justify-between items-center text-sm">
+                    <div className="text-center flex-1">
+                      <span className="block text-2xl mb-1">🍽️</span>
+                      <span className="font-bold text-primary">8 godzin</span>
+                      <span className="text-[10px] text-slate-400 uppercase block">Okno żywieniowe</span>
+                    </div>
+                    <div className="w-px h-12 bg-slate-100"></div>
+                    <div className="text-center flex-1">
+                      <span className="block text-2xl mb-1">⏳</span>
+                      <span className="font-bold text-accent">16 godzin</span>
+                      <span className="text-[10px] text-slate-400 uppercase block">Czas postu</span>
+                    </div>
                   </div>
                 </div>
 
-                <button 
-                  onClick={toggleFasting}
-                  className={cn(
-                    "w-full mt-12 py-5 rounded-3xl font-extrabold text-lg shadow-xl transition-all active:scale-95",
-                    state.fasting.isActive 
-                      ? "bg-red-500 text-white shadow-red-500/20" 
-                      : "bg-success text-white shadow-success-500/20"
-                  )}
-                >
-                  {state.fasting.isActive ? "Zakończ Post" : "Zacznij Post"}
-                </button>
+                {/* Timer */}
+                <div className="bg-white rounded-3xl p-8 shadow-sm border border-slate-50 w-full flex flex-col items-center">
+                  <div className="relative w-64 h-64 flex items-center justify-center">
+                    {/* Progress Ring */}
+                    <svg className="absolute inset-0 w-full h-full -rotate-90">
+                      <circle 
+                        cx="128" cy="128" r="116" 
+                        className="stroke-slate-100 fill-none stroke-[12]"
+                      />
+                      <circle 
+                        cx="128" cy="128" r="116" 
+                        className="stroke-primary fill-none stroke-[12] transition-all duration-1000"
+                        strokeDasharray={728.8}
+                        strokeDashoffset={728.8 - (728.8 * fastingProgress) / 100}
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                    
+                    <div className="text-center z-10">
+                      <span className={cn("text-xs font-extrabold uppercase tracking-[0.2em] mb-2 block", state.fasting.isActive ? "text-primary" : "text-slate-400")}>
+                        {state.fasting.isActive ? "Trwa Post" : "Gotowa?"}
+                      </span>
+                      <span className="text-4xl font-extrabold text-accent tabular-nums">{fastingTime}</span>
+                    </div>
+                  </div>
 
-                <p className="mt-8 text-center text-slate-400 text-xs leading-relaxed max-w-[280px]">
-                  Zalecany czas: <strong>16 godzin</strong>.<br/>W czasie postu pij tylko wodę, czarną kawę lub herbatę bez cukru i mleka.
-                </p>
+                  <button 
+                    onClick={toggleFasting}
+                    className={cn(
+                      "w-full mt-8 py-4 rounded-2xl font-extrabold text-lg shadow-lg transition-all active:scale-95",
+                      state.fasting.isActive 
+                        ? "bg-red-500 text-white shadow-red-500/20" 
+                        : "bg-success text-white shadow-success-500/20"
+                    )}
+                  >
+                    {state.fasting.isActive ? "Zakończ Post" : "Zacznij Post"}
+                  </button>
+                  
+                  <p className="mt-6 text-center text-slate-400 text-xs leading-relaxed">
+                    W czasie postu pij tylko wodę, czarną kawę lub herbatę bez cukru i mleka.
+                  </p>
+                </div>
+
+                {/* Water Tracker */}
+                <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-50 w-full">
+                  <div className="text-center mb-6">
+                    <h4 className="font-bold text-accent mb-1">Nawodnienie (Cel: 2L)</h4>
+                    <p className="text-slate-400 text-[10px] font-bold uppercase tracking-wider">Kliknij szklankę po wypiciu 250ml</p>
+                  </div>
+                  <div className="grid grid-cols-4 gap-4 justify-items-center">
+                    {Array.from({ length: 8 }).map((_, i) => (
+                      <button 
+                        key={i}
+                        onClick={() => updateWater(state.currentDay, i + 1)}
+                        className={cn(
+                          "text-3xl transition-all duration-300 transform active:scale-125",
+                          (state.waterIntake[state.currentDay] || 0) > i ? "grayscale-0 opacity-100 scale-110" : "grayscale opacity-20 scale-100"
+                        )}
+                      >
+                        💧
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </motion.div>
             )}
 
