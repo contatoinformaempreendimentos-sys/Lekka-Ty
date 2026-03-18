@@ -267,7 +267,7 @@ export default function App() {
                         </div>
                       </div>
                       <div className="p-3 bg-slate-50 rounded-xl border border-slate-100">
-                        <p className="text-xs text-slate-600 font-medium leading-relaxed">
+                        <p className="text-xs text-slate-600 font-medium leading-relaxed whitespace-pre-wrap">
                           <span className="font-bold text-primary block mb-1">Przepis:</span>
                           {meal.instructions}
                         </p>

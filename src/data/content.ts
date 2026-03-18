@@ -1,4 +1,5 @@
 import { Meal, Workout, WellnessTip, Article, DayPlan, Bonus } from '../types';
+import { generateMeal } from './mealGenerator';
 
 export const bonuses: Bonus[] = [
   {
@@ -215,21 +216,16 @@ export const articles: Article[] = Array.from({ length: 55 }).map((_, i) => {
 });
 
 export const getDayPlan = (day: number): DayPlan => {
-  const bIdx = (day * 3 + 1) % breakfasts.length;
-  const lIdx = (day * 5 + 2) % lunches.length;
-  const sIdx = (day * 7 + 3) % snacks.length;
-  const dIdx = (day * 11 + 4) % dinners.length;
-  
   const wIdx = (day * 2) % workouts.length;
   const tIdx = day % wellnessTips.length;
 
   return {
     day,
     meals: [
-      { ...breakfasts[bIdx], type: 'Śniadanie' } as Meal,
-      { ...lunches[lIdx], type: 'Obiad' } as Meal,
-      { ...snacks[sIdx], type: 'Przekąska' } as Meal,
-      { ...dinners[dIdx], type: 'Kolacja' } as Meal,
+      generateMeal(day, 'Śniadanie'),
+      generateMeal(day, 'Obiad'),
+      generateMeal(day, 'Przekąska'),
+      generateMeal(day, 'Kolacja'),
     ],
     workout: workouts[wIdx],
     tip: wellnessTips[tIdx],
